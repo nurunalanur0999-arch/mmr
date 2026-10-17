@@ -1,0 +1,25 @@
+BENTLEY OUTDOORS WEBSITE — START HERE
+
+WINDOWS (recommended)
+1. Download the ZIP file.
+2. Right-click the ZIP and choose Extract All.
+3. Open the extracted folder named bentley_outdoors_multipage.
+4. Double-click start_website.bat.
+5. Your browser should open a local address such as http://127.0.0.1:8000/index.html. The launcher automatically picks a free port if 8000 is busy.
+6. Keep the black server window open while using the website.
+
+IF THE BAT FILE DOES NOT WORK
+- Make sure you extracted the ZIP first. Do not open index.html from inside the ZIP.
+- Try double-clicking index.html directly.
+- If the server launcher says Python is missing, install Python 3 and run start_website.bat again.
+
+MAC / LINUX
+1. Extract the ZIP.
+2. Open a terminal in the extracted folder.
+3. Run: python3 serve_website.py
+
+IMPORTANT
+- Keep index.html, all other HTML files, styles.css, assets.js, data.js, site.js, and the assets folder together.
+- This is a local website package, not a public internet URL. To make it public, upload the complete folder to a static web host.
+- The inquiry form prepares Email/WhatsApp messages; it does not store inquiries in a database.
+- Confirm the company's contact details, service area, certifications, and project photos before publishing.

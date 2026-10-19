@@ -16,3 +16,8 @@ FORM LAYOUT FIX
 - Hidden Netlify form-name inputs are explicitly hidden.
 - Home inquiry buttons use a non-overlapping responsive layout.
 - Original brand styling and all other page layouts are preserved.
+
+ABOUT PAGE CONTENT UPDATE:
+- Added the supplied Who We Are and Ethan Bentley biography text.
+- The supplied prnt.sc page could not be retrieved as a raw image in this environment, so the About page currently uses an existing local landscape image as an illustration. Upload the original JPG/PNG directly to embed the exact image.
+- The Voyage ATL link currently points to the magazine home page because a direct article URL was not supplied or verified.

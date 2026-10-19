@@ -13,3 +13,8 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/assets/approved-reviews.json"
+  [headers.values]
+    Cache-Control = "public, max-age=120, must-revalidate"

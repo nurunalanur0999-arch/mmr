@@ -1,0 +1,21 @@
+BENTLEY OUTDOORS — CUSTOMER REVIEWS SETUP
+
+1. HOME PAGE: shows only a read-only, automatically sliding carousel of approved reviews; it contains no review-submission form.
+2. SERVICE REVIEW FORMS: each of the six individual service pages has its own form; they all submit to Netlify Forms under the name customer-review, with a hidden service field.
+3. ENABLE FORMS: Netlify Dashboard → Forms → form detection. Enable then redeploy. Try one test review.
+4. MODERATION: every submitted review first arrives in Netlify Forms; a submission is NOT automatically published on the site.
+5. PUBLISHING APPROVED REVIEWS: after checking a review and confirming permission, add its public name, review text, optional service, and optional profile to assets/approved-reviews.json. Do not include private email addresses. Commit to GitHub; Netlify will deploy, and the carousel automatically rotates through all approved reviews.
+6. The Home Page refreshes the approved review JSON every 2 minutes while visitors have it open; after Netlify deployment the latest approved reviews enter the automatic slideshow.
+7. Facebook avatars are best effort. External Facebook picture URLs may be blocked; initials render instead.
+8. Build command: npm run build; Publish directory: dist (no leading dot).
+
+Example extra JSON entry (insert comma between objects):
+{ "name":"Customer Name", "initials":"CN", "quote":"Great outdoor service.", "service":"Maintenance", "profile":"", "avatar":"" }
+
+All six service pages:
+- service-maintenance.html
+- service-installation.html
+- service-irrigation.html
+- service-landscape-design.html
+- service-garden-design.html
+- service-anything-outdoors.html

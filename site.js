@@ -24,10 +24,30 @@ function updateBrand() {
 }
 updateBrand();
 
+const SERVICE_PAGE_PATHS = ['service-maintenance.html','service-installation.html','service-irrigation.html','service-landscape-design.html','service-garden-design.html','service-anything-outdoors.html'];
+
+const SERVICE_QUERY_KEYS = ['maintenance','installation','irrigation','landscape-design','garden-design','anything-outdoors'];
+const BOOKING_SERVICE_DEFAULTS = {
+  'maintenance': 'basic',
+  'installation': 'basic',
+  'irrigation': 'basic',
+  'landscape-design': 'advanced',
+  'garden-design': 'advanced',
+  'anything-outdoors': 'consultation'
+};
+function slugify(value) { return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
+
 const servicesGrid = $('#servicesGrid');
-if (servicesGrid) {
-  servicesGrid.innerHTML = SERVICES.map((service, index) => `<article class="card"><div class="card-image"><img src="${IMG[service[4]]}" alt="${escapeHtml(service[1])}" loading="lazy"><div class="image-pill">${service[0]} • ${escapeHtml(service[2])}</div></div><div class="card-body"><h3>${escapeHtml(service[1])}</h3><p>${escapeHtml(service[3])}</p><ul class="ticks"><li>${escapeHtml(service[5])}</li><li>${escapeHtml(service[6])}</li></ul></div><div class="card-actions"><button class="secondary" type="button" onclick="showService(${index})">Scope Details</button><button type="button" onclick="inquire(${index},'service')">Inquire for Quote →</button></div></article>`).join('');
+
+if (servicesGrid && !servicesGrid.children.length) {
+  servicesGrid.innerHTML = SERVICES.map((service, index) => {
+    const servicePath = SERVICE_PAGE_PATHS[index] || 'services.html';
+    const serviceKey = SERVICE_QUERY_KEYS[index] || slugify(service[1]);
+    const bookingPackage = BOOKING_SERVICE_DEFAULTS[serviceKey] || 'basic';
+    return `<article class="card service-card-premium"><div class="card-image"><img src="${IMG[service[4]]}" alt="${escapeHtml(service[1])}" loading="lazy"><div class="image-pill">${service[0]} • ${escapeHtml(service[2])}</div></div><div class="card-body"><h3>${escapeHtml(service[1])}</h3><p>${escapeHtml(service[3])}</p><ul class="ticks"><li>${escapeHtml(service[5])}</li><li>${escapeHtml(service[6])}</li></ul></div><div class="card-actions card-actions-service"><a class="secondary" href="${servicePath}">Service Details ↗</a><a class="btn-mini-book" href="booking.html?service=${encodeURIComponent(service[1])}&serviceKey=${encodeURIComponent(serviceKey)}&package=${encodeURIComponent(bookingPackage)}">Book Now →</a></div><div class="service-card-review-row"><a href="contact.html?projectType=${encodeURIComponent(service[1])}&note=${encodeURIComponent(`Interested in ${service[1]} (${service[2]}). `)}">Request a Quote</a><a href="${servicePath}#leave-review">Leave a Review ↗</a></div></article>`;
+  }).join('');
 }
+
 
 const filters = ['All Spaces', 'Residential Gardens', 'Rooftop & Terrace', 'Courtyards & Zen', 'Hardscape & Lighting'];
 let selectedCategory = 'All Spaces';
@@ -42,7 +62,7 @@ window.setCategory = (category) => { selectedCategory = category; renderProjects
 renderProjects();
 
 const processGrid = $('#processGrid');
-if (processGrid) processGrid.innerHTML = PROCESS.map(step => `<div class="process-card"><div><span class="process-num">${step[0]}</span><h3>${escapeHtml(step[1])}</h3><p class="sub">${escapeHtml(step[2])}</p><p class="desc">${escapeHtml(step[3])}</p></div><div class="note">✓ &nbsp; ${escapeHtml(step[4])}</div></div>`).join('');
+if (processGrid && !processGrid.children.length) processGrid.innerHTML = PROCESS.map(step => `<div class="process-card"><div><span class="process-num">${step[0]}</span><h3>${escapeHtml(step[1])}</h3><p class="sub">${escapeHtml(step[2])}</p><p class="desc">${escapeHtml(step[3])}</p></div><div class="note">✓ &nbsp; ${escapeHtml(step[4])}</div></div>`).join('');
 
 const modalOverlay = $('#modalOverlay');
 const showModal = (content) => {
@@ -57,7 +77,7 @@ window.hideModal = () => { if (modalOverlay) modalOverlay.classList.add('hidden'
 if (modalOverlay) modalOverlay.addEventListener('click', event => { if (event.target === modalOverlay) window.hideModal(); });
 window.showService = (index) => {
   const service = SERVICES[index]; if (!service) return;
-  showModal(`<span class="eyebrow">SERVICE / ${service[0]}</span><h2>${escapeHtml(service[1])}</h2><img class="modal-image" src="${IMG[service[4]]}" alt="${escapeHtml(service[1])}"><p>${escapeHtml(service[3])}</p><h3>Included scope</h3><ul class="ticks"><li>${escapeHtml(service[5])}</li><li>${escapeHtml(service[6])}</li></ul><div style="margin-top:18px"><button class="btn dark" onclick="inquire(${index},'service')">Request This Service →</button></div>`);
+  showModal(`<span class="eyebrow">SERVICE / ${service[0]}</span><h2>${escapeHtml(service[1])}</h2><img class="modal-image" src="${IMG[service[4]]}" alt="${escapeHtml(service[1])}"><p>${escapeHtml(service[3])}</p><h3>Included scope</h3><ul class="ticks"><li>${escapeHtml(service[5])}</li><li>${escapeHtml(service[6])}</li></ul><div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn dark" href="booking.html?service=${encodeURIComponent(service[1])}&serviceKey=${encodeURIComponent(SERVICE_QUERY_KEYS[index] || slugify(service[1]))}&package=${encodeURIComponent(BOOKING_SERVICE_DEFAULTS[SERVICE_QUERY_KEYS[index] || slugify(service[1])] || 'basic')}">Book Now →</a><button class="btn" onclick="inquire(${index},'service')">Request Quote</button></div>`);
 };
 window.showProject = (index) => {
   const project = PROJECTS[index]; if (!project) return;
@@ -80,26 +100,21 @@ const aboutToggle = $('#aboutToggle');
 if (aboutToggle) aboutToggle.addEventListener('click', () => { const details = $('#aboutMore'); if (!details) return; const hidden = details.classList.toggle('hidden'); aboutToggle.textContent = hidden ? 'Learn About Us →' : 'Hide Landscaping Principles ↑'; });
 
 function setupReferenceUpload(inputId, statusId) {
-  const input = document.getElementById(inputId);
+  const inputs = [inputId, inputId + '2', inputId + '3'].map(id => document.getElementById(id)).filter(Boolean);
   const status = document.getElementById(statusId);
-  if (!input) return;
-  const maxFiles = 3;
+  if (!inputs.length) return;
   const maxBytes = 8 * 1024 * 1024;
   const refresh = () => {
-    const files = [...(input.files || [])];
-    const total = files.reduce((sum, file) => sum + file.size, 0);
+    const files = inputs.flatMap(input => Array.from(input.files || []));
+    const total = files.reduce((sum,file) => sum + file.size, 0);
     let error = '';
-    if (files.length > maxFiles) error = 'Please choose no more than 3 images.';
-    else if (files.some(file => !file.type.startsWith('image/'))) error = 'Please select image files only.';
-    else if (total > maxBytes) error = 'Please keep the total image size under 8 MB.';
-    input.setCustomValidity(error);
-    if (status) {
-      if (error) status.textContent = error;
-      else if (!files.length) status.textContent = 'Choose up to 3 images, total 8 MB or less.';
-      else status.textContent = files.map(file => file.name).join(' • ') + ` (${(total / (1024 * 1024)).toFixed(2)} MB total)`;
-    }
+    if(files.length > 3) error = 'Please choose no more than three images.';
+    else if (files.some(file => !file.type.startsWith('image/'))) error='Please select image files only.';
+    else if (total > maxBytes) error='Please keep the total image size under 8 MB.';
+    inputs.forEach(input => input.setCustomValidity(error));
+    if(status) status.textContent = error || (files.length ? files.map(file=>file.name).join(' · ') + ` (${(total / (1024*1024)).toFixed(2)} MB total)` : 'Choose up to three images, total 8 MB or less.');
   };
-  input.addEventListener('change', refresh);
+  inputs.forEach(input=>input.addEventListener('change', refresh));
   refresh();
 }
 setupReferenceUpload('homeReferenceImages', 'homeReferenceImagesStatus');
@@ -113,6 +128,7 @@ if (inquiryForm) {
   if (requestedType && $('#projectType')) {
     const option = [...$('#projectType').options].find(item => item.value === requestedType || item.textContent === requestedType);
     if (option) $('#projectType').value = option.value;
+    else $('#projectType').value = 'Anything Outdoors';
   }
   if (requestedNote && $('#projectDescription') && !$('#projectDescription').value) $('#projectDescription').value = requestedNote;
   const dateField = $('#preferredDate');
@@ -130,7 +146,7 @@ if (inquiryForm) {
     if (!validContact(contact)) { alert('Please provide a valid email address or phone number.'); $('#contactMethod').focus(); return false; }
     if (!location) { alert('Please specify the project location.'); $('#location').focus(); return false; }
     if (brief.length < 12) { alert('Please describe your project in at least 12 characters.'); $('#projectDescription').focus(); return false; }
-    const files = [...(document.getElementById('referenceImages')?.files || [])];
+    const files = [...document.querySelectorAll('input[type="file"][id^="referenceImages"]')].flatMap(input=>[...(input.files||[])]);
     const fileNames = files.length ? files.map(file => `- ${file.name}`).join('\n') : 'No reference images attached';
     const message = `PROJECT INQUIRY — ${brand.name}\n----------------------------------------\nClient Name: ${name}\nContact (Phone / Email): ${contact}\nProject Type: ${read('#projectType')}\nProject Location: ${location}\nApproximate Area: ${read('#area') || 'To be discussed during consultation'}\nPreferred Consultation Date: ${read('#preferredDate') || 'Not specified'}\nPreferred Consultation Time: ${read('#preferredTime') || 'No preference'}\nReference Images:\n${fileNames}\n\nProject Brief & Outdoor Goals:\n${brief}\n----------------------------------------\nPrepared via ${brand.name} Website Inquiry Builder`;
     const resultText = $('#resultText'); if (resultText) resultText.textContent = message;
@@ -152,7 +168,9 @@ if (inquiryForm) {
     if (!validContact(contact)) { event.preventDefault(); alert('Please provide a valid email address or phone number.'); $('#contactMethod').focus(); return; }
     if (!location) { event.preventDefault(); alert('Please specify the project location.'); $('#location').focus(); return; }
     if (brief.length < 12) { event.preventDefault(); alert('Please describe your project in at least 12 characters.'); $('#projectDescription').focus(); return; }
-    if (fileInput && !fileInput.checkValidity()) { event.preventDefault(); fileInput.reportValidity(); return; }
+    const fileInputs = [...document.querySelectorAll('input[type="file"][id^="referenceImages"]')];
+    const invalidFile = fileInputs.find(item => !item.checkValidity());
+    if (invalidFile) { event.preventDefault(); invalidFile.reportValidity(); return; }
     // Valid submissions continue natively to Netlify Forms, including any attached image files.
   });
 }
@@ -181,10 +199,9 @@ if (homeInquiryForm) {
       description.focus();
       return;
     }
-    if (files && !files.checkValidity()) {
-      event.preventDefault();
-      files.reportValidity();
-    }
+    const fileInputs = [...document.querySelectorAll('input[type="file"][id^="homeReferenceImages"]')];
+    const invalidFile = fileInputs.find(item=>!item.checkValidity());
+    if (invalidFile) { event.preventDefault(); invalidFile.reportValidity(); }
     // Valid form submissions continue natively to Netlify Forms with selected image files.
   });
 }
@@ -196,6 +213,9 @@ if (copyButton) copyButton.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(text); copyButton.textContent = '✓ Copied to Clipboard'; }
   catch { const area = document.createElement('textarea'); area.value = text; document.body.appendChild(area); area.select(); const copied = document.execCommand('copy'); area.remove(); copyButton.textContent = copied ? '✓ Copied to Clipboard' : 'Select and copy the text above'; }
 });
+
+
+// Booking calendar logic is isolated in booking-calendar.js and loaded only on booking.html.
 
 document.querySelectorAll('.navlinks a[data-nav]').forEach(link => { if (link.dataset.nav === document.body.dataset.page) link.classList.add('active'); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') window.hideModal(); });

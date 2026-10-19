@@ -1,0 +1,30 @@
+BENTLEY OUTDOORS — DEEP TECHNICAL AUDIT (2026-10-19)
+
+CODE ISSUES FIXED
+1. Mobile booking page overflow: previously stretched to about 866 pixels at a 390-pixel viewport. Grid sizing corrected; now fits 390 pixels.
+2. Customer reviews infinite slider duplication: after two or more slides, the same review sometimes appeared twice. Slider window calculation rewritten and Next/Previous rotation checked.
+3. Service Areas skip-to-content broken link: linked #main-content anchor restored.
+4. Booking CTA wording: now "Request Appointment", because the dates/times are preferred slots and a real schedule is not connected.
+5. Mobile menu controls and image-upload status accessibility improved.
+6. Internal setup and audit text documents are no longer copied into Netlify's public dist folder.
+
+TESTS PASSED
+- npm run build creates dist/index.html, contact.html and required assets.
+- All JavaScript source files passed node --check.
+- 19/19 HTML pages checked at width 390 pixels: no horizontal overflow.
+- 19/19 HTML pages: no broken local file references, duplicate IDs, or missing <title> elements.
+- Booking wizard browser test: three package choices, day selection, time choice, confirmation form and stored booking date.
+- Reviews carousel browser test: repeated Next clicks produced correctly ordered consecutive reviews, not duplicated neighbors.
+- Test with SITE_URL=https://example.com generated valid canonical URLs and sitemap.xml containing 14 intended indexable pages. Rebuilt without placeholder domain for the delivered ZIP.
+- Desktop and mobile booking previews rendered with local website image assets.
+
+UNVERIFIED / REQUIRES LIVE CONNECTED SYSTEMS
+- Netlify Forms submission processing, email notifications and attachment delivery require a live deployment, enabled form detection and a test submission.
+- Appointment calendar represents preferred dates and times, NOT verified live availability. There is no double-booking prevention, payment processing or external calendar synchronization.
+- Facebook profile images and live map tiles are third-party resources and may not always load (fallbacks remain).
+- Business contact details, pricing, testimonials, image rights and service availability must be confirmed by the site owner.
+- Search engine rankings cannot be guaranteed.
+
+DEPLOYMENT
+GitHub ZIP: unzip and upload root files to repository, commit. Netlify: Base directory blank; Build command npm run build; Publish directory dist. The Netlify build uses the URL environment variable for canonical URLs and sitemap.xml.
+Direct ZIP: upload directly to Netlify drag-and-drop (files are already compiled at ZIP root). Domain-dependent canonical and sitemap aren't included when the domain isn't known.

@@ -1,0 +1,10 @@
+Bentley Outdoors — Home Page Service Cards Fix
+
+- The six Home Page service cards now use the exact image, description and feature lists from the existing Services Page.
+- Each card has Service Details and Book Now at the bottom.
+- Each booking link keeps its specific serviceKey so the correct service is preselected by the current booking system.
+- No Home Page review-submission form was added. Service review forms remain on their dedicated pages.
+- Home Page quick-service links now go to their specific Service Detail page.
+- All other sections were preserved from the last deep-audited ZIP.
+
+Netlify GitHub deployment: extract ZIP to repository root; npm run build; publish dist.

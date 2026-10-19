@@ -1,0 +1,13 @@
+BENTLEY OUTDOORS — HOMEPAGE FIXES (19 Oct 2026)
+
+1) Original 1120×625 hero image is displayed at its natural ~1.79:1 ratio, rather than the previous forced 1.48:1 crop.
+2) 16 supplied written Google customer reviews restored from the prior review component, excluding Catie L. by prior request.
+3) Three previously supplied Facebook reviews retained. Total = 19 written testimonials in the rotation; Google listing had 18 total Google reviews, but only 16 written featured entries were supplied.
+4) A customer named Jared Lazenby has one Facebook and one Google review with different wording; both are retained as separate sourced feedback.
+5) Full quote text is preserved in assets/approved-reviews.json; cards show a 5-line preview and full text in Read full review modal.
+6) Static HTML cards include all supplied reviews, so content is still present if the JSON fetch fails. JavaScript slider automatically rotates through the current JSON records every 5.5 seconds.
+7) External Facebook avatar images may be blocked; initials are used as safe fallback.
+8) New reviews are not auto-published. Add approved entries to assets/approved-reviews.json and commit/redeploy. Netlify Forms submissions do NOT feed the slider automatically.
+
+GITHUB/NETLIFY DEPLOYMENT
+Unzip into repository root, replacing previous files. Settings: npm run build; publish directory dist (no leading dot).
